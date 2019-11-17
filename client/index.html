@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Visual Cloud</title>
+    <link rel="stylesheet" type="text/css" href="/client/CSS/semantic.min.css" />
+    <link rel="stylesheet" type="text/css" href="/client/CSS/custom.css" />
+    <link rel="stylesheet" type="text/css" href="/client/CSS/calendar.min.css" />
+  </head>
+  <body>
+    <div class="ui wide sidebar vertical menu">
+        <div class="item header">
+            Settings:
+        </div>
+        <div class="ui item">
+            <div class="header">Maximum Searching Results:</div>
+            <div class="ui input">
+              <input type="text" placeholder="200">
+            </div>
+        </div>
+        <div class="ui item">
+            <div class="header">Maximum Terms Number:</div>
+            <div class="ui input">
+              <input type="text" placeholder="100">
+            </div>
+        </div>
+        <div class="ui item">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="public" checked="true">
+              <label>Show timeline</label>
+            </div>
+        </div>
+        <div class="ui item">
+            <div class="header">Data File Path:</div>
+            <div class="ui input">
+              <input type="text" value="./server/data/data.json">
+            </div>
+        </div>
+        <div class="ui loading item">
+            <div class="ui teal progress" data-value="1" data-total="10" id="pgsbar">
+                <div class="bar">
+                    <div class="progress"></div>
+                </div>
+
+                <div class="label">Loading</div>
+            </div>
+        </div>
+        <div class="ui item">
+            <div class="ui fluid button">Confirm</div>
+        </div>
+    </div>
+    <div class="pusher">
+        <div class="ui small stackable menu" id="searchInput">
+            <div class="ui item button" id="pageID">
+                Visual Cloud
+            </div>
+
+            <div class="ui item">
+                <div class="ui calendar" id="startDate">
+                  <div class="ui input left icon">
+                    <i class="calendar icon"></i>
+                    <input type="text" placeholder="Start">
+                  </div>
+                </div>
+            </div>
+            <div class="ui item">
+                <div class="ui calendar" id="endDate">
+                  <div class="ui input left icon">
+                    <i class="calendar icon"></i>
+                    <input type="text" placeholder="End">
+                  </div>
+                </div>
+            </div>
+            <form class="item fcsinput" id="kdInput">
+                <div class="ui input">
+                  <input type="text" placeholder="Keywords...">
+                </div>
+            </form>
+            <a class="ui icon item" id="submitSearch">
+                <i class="search link icon"></i>
+            </a>
+            <a class="ui icon item" id="addToBox">
+                <i class="add square icon"></i>
+            </a>
+        </div>
+        <div class="ui icon yellow message" id="msgPane">
+          <i class="inbox icon"></i>
+          <div class="content">
+            <div class="header">
+              No related searching results.
+            </div>
+            <p></p>
+          </div>
+        </div>
+        <div id="multiQueryBox">
+            <div id="queryBox" class="inlineblock">
+
+            </div>
+            <div class="ui buttons" class="inlineblock">
+                <button class="ui pink button" id="commitBoxSearch">GO</button>
+                <button class="ui button" id="clearSearchBox">Clear</button>
+            </div>
+        </div>
+        <div class="ui segment" id="content">
+            <div class="ui segment" id="timeline">
+            </div>
+            <div class="ui grid">
+                <div class="thirteen wide column" id="graphContent">
+                    <div class="ui top mini attached tabular menu">
+                        <a class="item tl" id="wi">Visual Cloud</a>
+                        <!-- <a class="item tl" id="dg">Layer Hierarchy</a> -->
+                        <!-- <a class="item right floated" id="mdlToggle">Choose terms</a> -->
+                        <a class="ui right floated pink basic button tl" id="hd">Hide Graphs</a>
+                    </div>
+                    <div class="ui bottom attached segment graphPane" id="gwi">
+                        <div id="heatBK"></div>
+                        <div id="gwicl"></div>
+                    </div>
+                    <div class="ui bottom attached segment graphPane" id="gdg">
+                    </div>
+                </div>
+                <div class="three wide column" id="settingPanes">
+                    <div class="infoPane" id="tpp">
+                        <div class="ui top attached scrollable segment" id="clcInfo">
+                        </div>
+                        <div class="ui bottom attached three mini buttons" id="clcButtons">
+                            <div class="ui red button">Clear</div>
+                            <div class="ui blue button">Searh</div>
+                            <div class="ui green button">New Tab</div>
+                        </div>
+                        <div class="ui hidden divider"></div>
+                        <div class="ui top mini attached tabular menu">
+                            <a class="active item" id="gs1">Graph Setting</a>
+                            <!-- <a class="item" id="gps1">Group Setting</a> -->
+                        </div>
+                        <div class="ui bottom attached segment settingPane">
+                            <div class="graphPara" id="tppg">
+                                <form id="tfw" class="ui form">
+                                    <div class="field">
+                                        <label>Font Family:</label>
+                                        <select class="ui compact dropdown" id="fontfm">
+                                            <option value="Times">Times</option>
+                                            <option value="Impact">Impact</option>
+                                            <option value="Arial">Arial</option>
+                                            <option value="Helvetica">Helvetica</option>
+                                            <option value="Times New Roman">Times New Roman</option>
+                                            <option value="Courier New">Courier New</option>
+                                            <option value="Courier">Courier</option>
+                                            <option value="Verdana">Verdana</option>
+                                            <option value="Georgia">Georgia</option>
+                                            <option value="Palatino">Palatino</option>
+                                            <option value="Garamond">Garamond</option>
+                                            <option value="Bookman">Bookman</option>
+                                            <option value="Comic Sans MS">Comic Sans MS</option>
+                                            <option value="Trebuchet MS">Trebuchet MS</option>
+                                            <option value="Arial Black">Arial Black</option>
+                                        </select>
+                                    </div>
+                                    <label>Tag Size Scale:</label>
+                                    <div id="sc1" class="inline fields">
+
+                                        <div class="field">
+                                            <div class="ui radio checkbox">
+                                                <input type="radio" name="tpManner" value="linear" />
+                                                <label>n</label>
+                                            </div>
+                                        </div>
+                                        <div class="field">
+                                            <div class="ui radio checkbox">
+                                                <input type="radio" name="tpManner" value="log" checked />
+                                                <label>log(n)</label>
+                                            </div>
+                                        </div>
+                                        <div class="field">
+                                            <div class="ui radio checkbox">
+                                                <input type="radio" name="tpManner" value="sqrt" />
+                                                <label>&radic;n</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label>Aspect Ratio:</label>
+                                        <select class="ui compact dropdown" id="aspratio">
+                                            <option value="a">auto</option>
+                                            <option value="0">1:1</option>
+                                            <option value="1">4:3</option>
+                                            <option value="2">16:9</option>
+                                            <option value="3">16:10</option>
+                                            <option value="4">21:9</option>
+                                        </select>
+                                    </div>
+                                    <!-- <div class="field">
+                                        <div class="ui orange fluid button" id="htmap">Show Heat Map</div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui fluid button" id="wlst">List Tags</div>
+                                    </div> -->
+                                </form>
+                            </div>
+                            <!-- <div class="groupPara" id="tppgo">
+                                <form id='gppw' class="ui form">
+                                    <div class="field">
+                                        <div class="ui toggle checkbox">
+                                        <input type="checkbox" value="gcvw" unchecked>
+                                        <label>Mouseover Filter group</label>
+                                    </div>
+                                    </div>
+                                    <div class="field">
+                                        <label>Group number:</label>
+                                        <input type="range" id="gnrw" value="5" min="2" max="14" oninput="gncw.value=gnrw.value" />
+                                        <output name="gncw" for="gnrw">5</output>
+                                    </div>
+                                </form>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui segment" id="searchResult">
+                <div id="pageBar">
+                    <select class="ui compact dropdown" id="sortType">
+                        <option value="increase">Increase</option>
+                        <option value="dercrease">Decrease</option>
+                    </select>
+                    Sort By
+                    <select class="ui dropdown" id="sortMethod">
+                        <option value="date">Date</option>
+                        <option value="title">Title</option>
+                    </select>
+                    <div id="page" class="ui buttons">
+                        <div id="pf1" class="ui mini basic button">
+                            Previous
+                        </div>
+                        <div class="ui dropdown basic button" id="pa2">
+                            <div class="text" id="pageShow">0</div>
+                            <div class="menu">
+                            </div>
+                        </div>
+                        <div id="pf2" class="ui mini basic button">
+                            Next
+                        </div>
+                    </div>
+                </div>
+                <div class="ui orange right ribbon label" id="ri">0 results</div>
+                <div class="ui hidden divider"></div>
+                <div id="resultsList" class="ui divided items">
+                </div>
+            </div>
+            <div id="vpBoard">
+                <!-- 
+                <div class="ui top attached segment" id="videoplayer">
+                  <video id='vid' controls >
+                  </video>
+                </div>
+                <div class="ui mini bottom attached menu">
+                    <div class="item">
+                        <label id="vpTimeInfo">time information</label>
+                    </div>
+                    <div class="ui right floated dropdown item" id="vplanguage">
+                        <label>English</label>
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <a class="item">Japanese</a>
+                            <a class="item">English</a>
+                            <a class="item">French</a>
+                        </div>
+                    </div>
+                </div>
+                -->
+
+                <div class="ui top attached segment">
+                    <a href="http://www.imdb.com" target="_blank" id="pagelink">
+                        <img id="pageseg">
+                    </a>
+                </div>
+                <div class="ui bottom attached segment" id="propseg"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="ui longer modal">
+        <div class="header">Check the terms:</div>
+        <div class="scrolling content">
+            <div class="description">
+                <div class="ui master checkbox">
+                  <input type="checkbox">
+                  <label>All</label>
+                </div>
+                <div class="ui divider"></div>
+                <div class="ui horizontal list" id="topicsChecker">
+                </div>
+                <div class="ui divider"></div>
+                <div class="ui equal width grid" id="termsCks">
+                    <div class="column">
+                        <div class="ui mini list tplist">
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="ui mini list tplist">
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="ui mini list tplist">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui approve blue button">Confirm</div>
+            <div class="ui cancel button">Cancel</div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="client/scripts/lib/jquery-1.12.0.min.js"></script>
+    <script src="/client/scripts/lib/semantic.min.js"></script>
+    <script src="/client/scripts/lib/calendar.min.js"></script>
+    <script src="/client/scripts/lib/numeric-1.2.6.min.js"></script>
+    <script src="/client/scripts/graph/graphPart.js"></script>
+    <script src="/client/scripts/lib/jLouvain.js"></script>
+    <script src="/client/scripts/timeline.js"></script>
+    <script src="/client/scripts/interAnalysis.js"></script>
+    <script src="/client/scripts/lib/d3.min.js"></script>
+    <script src="/client/scripts/graph/d3.layout.cloud.js"></script>
+    <script src="/client/scripts/BenSearch.js"></script>
+    <script src="/client/scripts/graph/faceCloud.js"></script>
+    <script src="/client/scripts/graph/dendrogram.js"></script>
+    <script src="/client/scripts/graph/packGraph.js"></script>
+    <script src="/client/scripts/index.js"></script>  
+  </body>
+</html>
